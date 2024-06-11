@@ -2,8 +2,8 @@ from sqlalchemy import create_engine, Column, Integer, String, ARRAY, Date
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 import logging
 
-from config import DATABASE_URI
-from dependency_injection import container
+from configs.config import DATABASE_URI
+from configs.dependency_injection import container
 
 Base = declarative_base()
 

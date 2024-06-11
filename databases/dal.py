@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import update, select
-from pg_config import Users
+from sqlalchemy import update, select, delete
+from databases.pg_config import Users
 
 
 class DAL():
@@ -34,6 +34,16 @@ class DAL():
             result = self.session.execute(query)
             self.session.commit()
             return bool(result.fetchone())
+        except Exception as e:
+            self.session.rollback()
+            print(f'{e}')
+
+    def delete_user(self, username: str):
+        query = delete(Users).where(Users.username==username)
+        try: 
+            self.session.execute(query)
+            self.session.flush()
+            self.session.commit()
         except Exception as e:
             self.session.rollback()
             print(f'{e}')

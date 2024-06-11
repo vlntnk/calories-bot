@@ -15,16 +15,14 @@ class Buttons():
     moderate = 'Занимаюсь дома регулярно'
     very = 'Хожу в зал 3+ раза в неделю'
     extra = 'Профессиональный спортсмен'
-    afresh = 'Начать заново'
-    carry_on = 'Продолжить'
-    delete = 'Удалить информацию'
 
 def start_keyboard():
     first_row = [KeyboardButton(text=Buttons.calculate_button)]
     second_row = [KeyboardButton(text=Buttons.set_plan_button)]
     markup = ReplyKeyboardMarkup(
         keyboard=[first_row, second_row],
-        resize_keyboard=True
+        resize_keyboard=True,
+        one_time_keyboard=True
     )
     return markup
 
@@ -71,14 +69,14 @@ def activity_level_keyboard():
     )
     return markup
 
-def user_exists_keyboard():
-    first = [KeyboardButton(text=Buttons.afresh)]
-    second = [KeyboardButton(text=Buttons.carry_on)]
-    third = [KeyboardButton(text=Buttons.delete)]
-    markup = ReplyKeyboardMarkup(
-        keyboard=[first, second, third],
-        resize_keyboard=True,
-        one_time_keyboard=True
-    )
-    return markup
+# def user_exists_keyboard():
+#     first = [KeyboardButton(text=Buttons.afresh)]
+#     second = [KeyboardButton(text=Buttons.carry_on)]
+#     third = [KeyboardButton(text=Buttons.delete)]
+#     markup = ReplyKeyboardMarkup(
+#         keyboard=[first, second, third],
+#         resize_keyboard=True,
+#         one_time_keyboard=True
+#     )
+#     return markup
     

@@ -12,7 +12,3 @@ class CalculatePlan(StatesGroup):
 
 class SetPlan(StatesGroup):
     calories = State()
-
-class Beginning(StatesGroup):
-    exists = State()
-    

@@ -2,26 +2,22 @@ from aiogram import Bot, Dispatcher
 import asyncio
 import logging
 
-from config import settings
+from configs.config import settings
 from actions.commands import command_router
 from actions.calculate import others
 from actions.set_plan import set_p
+from actions.start import start_router
 
 
 bot = Bot(token=settings.BOT_TOKEN)
 dispatcher = Dispatcher()
 
-
-dispatcher.include_routers(command_router, others, set_p)
+dispatcher.include_routers(command_router, others, set_p, start_router)
 
 
 async def main():
     logging.basicConfig(level=logging.INFO)
     await dispatcher.start_polling(bot)
-
-
-
-
 
 # @main_router.message()
 # async def echo(message: types.Message = None):

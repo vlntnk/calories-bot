@@ -3,9 +3,9 @@ from aiogram.types import ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 import re
 
-from keyboards import Buttons, gender_keyboard, aim_keyboard, activity_level_keyboard
+from keyboards.keyboards import Buttons, gender_keyboard, aim_keyboard, activity_level_keyboard
 from .state_machine import CalculatePlan
-from test_api import calculate_calories
+from api_interaction import calculate_calories
 
 
 others = Router()
