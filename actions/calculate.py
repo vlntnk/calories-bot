@@ -1,11 +1,12 @@
 from aiogram import Router, types
 from aiogram.types import ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
-import re
 
 from keyboards.keyboards import Buttons, gender_keyboard, aim_keyboard, activity_level_keyboard
 from .state_machine import CalculatePlan
 from api_interaction import calculate_calories
+from databases.dal import DAL
+from configs.dependency_injection import container
 
 
 others = Router()
@@ -14,7 +15,6 @@ translater = {Buttons.male: 'male', Buttons.female: 'female', Buttons.lost: 'wei
               Buttons.gain: 'weight_gain', Buttons.sedentary: 'sedentary', Buttons.lightly: 'ligthtly_active',
               Buttons.moderate: 'moderately_active', Buttons.very: 'very_active', Buttons.extra: 'extra_active'}
 
-pattern = r"[^0-9\.]"
 
 @others.message(lambda message: message.text == Buttons.lets_go_button)
 async def handle_lets_go(message: types.Message, state: FSMContext):
@@ -79,6 +79,12 @@ async def handle_calculate(message: types.Message, state: FSMContext):
             data[parametr] = translater[data[parametr]]
     print(data)
     response = calculate_calories(data)
-    await message.answer(
-        f'Твоя дневная норма {re.sub(pattern, "", response)} калорий'
-    )
+    try:
+        dal_object = DAL(container.get('db_session'))
+        dal_object.write_calories(message.from_user.username, int(response))
+    except Exception as e:
+        print(f'{e}')
+    finally:
+        await message.answer(
+            f'Твоя дневная норма {int(response)} калорий'
+        )

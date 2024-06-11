@@ -19,7 +19,7 @@ class DAL():
             print(f'{e}')
         
     def write_calories(self, username: str, calories: int):
-        query = update(Users).where(username=username).values(calories=calories)
+        query = update(Users).where(Users.username==username).values(calories=calories)
         try:
             self.session.execute(query)
             self.session.flush()
