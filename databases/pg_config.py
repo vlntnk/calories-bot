@@ -1,4 +1,5 @@
-from sqlalchemy import create_engine, Column, Integer, String, ARRAY, Date
+from sqlalchemy import (create_engine, Column, Integer, String, ARRAY, Date, 
+                        Text, ForeignKey)
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 import logging
 
@@ -16,6 +17,15 @@ class Users(Base):
     calories = Column(Integer)
     dates = Column(ARRAY(Date))
     consumed = Column(ARRAY(Integer))
+
+class Dishes(Base):
+    __tablename__ = 'Dishes'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    dish = Column(Text, nullable=False)
+    calories = Column(Integer, nullable=False)
+    author = Column(String, ForeignKey('Users.username'))
 
 engine = create_engine(DATABASE_URI, echo=True)
 SessionLocal = sessionmaker(engine, expire_on_commit=False, class_=Session)

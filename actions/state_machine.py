@@ -12,3 +12,15 @@ class CalculatePlan(StatesGroup):
 
 class SetPlan(StatesGroup):
     calories = State()
+
+class MainPlot(StatesGroup):
+    adding = State()
+
+class Adding(StatesGroup):
+    name = State()
+    dish = State()
+    calories = State()
+
+class HaveEaten(StatesGroup):
+    choose = State()
+    grams = State()

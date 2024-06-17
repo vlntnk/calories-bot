@@ -7,6 +7,7 @@ from .state_machine import CalculatePlan
 from api_interaction import calculate_calories
 from databases.dal import DAL
 from configs.dependency_injection import container
+from .independent import send_main_kb
 
 
 others = Router()
@@ -88,3 +89,5 @@ async def handle_calculate(message: types.Message, state: FSMContext):
         await message.answer(
             f'Твоя дневная норма {int(response)} калорий'
         )
+        await send_main_kb(message)
+
