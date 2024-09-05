@@ -6,6 +6,7 @@ from .state_machine import HaveEaten
 from keyboards.inline_kb import Data
 from configs.dependency_injection import container
 from databases.dal import DAL
+from databases.rdal import RedisDal
 from .independent import send_main_kb
 
 eaten = Router()
@@ -31,9 +32,16 @@ async def handle_get_meal(call: CallbackQuery, state: FSMContext):
 async def handle_grams(message: Message, state: FSMContext):
     calr = await state.get_data()
     consumed = calculate_calories(int(calr['calories']), int(message.text))
-    await message.answer(
-        text=f'Готов! Съеденные {consumed} каллории сохранены'
-    )
-    await state.clear()
-    await send_main_kb(message)
+    try:
+        rd_object = RedisDal()
+        result = rd_object.write_eaten(message.chat.username, consumed)
+        print(result)
+    except Exception as ex:
+        raise Exception('redis error in handle grams', ex)
+    else:
+        await message.answer(
+            text=f'Готов! Съеденные {consumed} каллории сохранены'
+        )
+        await state.clear()
+        await send_main_kb(message)
     

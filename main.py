@@ -1,6 +1,8 @@
 from aiogram import Bot, Dispatcher
 import asyncio
 import logging
+import subprocess
+import time
 
 from configs.config import settings
 from actions.commands import command_router
@@ -9,14 +11,17 @@ from actions.set_plan import set_p
 from actions.start import start_router
 from actions.add_dish import adding_dish
 from actions.addind_eaten import eaten
+from actions.statistics import statistics
 from configs.single_source import CaloriesBot
+from configs.dependency_injection import container
+from databases.pg_config import SessionLocal
 
 
 bot = CaloriesBot(token=settings.BOT_TOKEN)
 dispatcher = Dispatcher()
 
 dispatcher.include_routers(command_router, others, set_p, start_router, adding_dish,
-                           eaten)
+                           eaten, statistics)
 
 
 async def main():
