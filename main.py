@@ -1,8 +1,7 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher, Router
+from aiogram.types import Message
 import asyncio
 import logging
-import subprocess
-import time
 
 from configs.config import settings
 from actions.commands import command_router
@@ -13,36 +12,26 @@ from actions.add_dish import adding_dish
 from actions.addind_eaten import eaten
 from actions.statistics import statistics
 from configs.single_source import CaloriesBot
-from configs.dependency_injection import container
-from databases.pg_config import SessionLocal
 
 
 bot = CaloriesBot(token=settings.BOT_TOKEN)
 dispatcher = Dispatcher()
 
+exception = Router()
+
+@exception.message()
+async def handle_other_message(message: Message):
+    await message.answer(
+        text = 'Немного не то('
+    )
+
 dispatcher.include_routers(command_router, others, set_p, start_router, adding_dish,
-                           eaten, statistics)
+                           eaten, statistics, exception)
 
 
 async def main():
     logging.basicConfig(level=logging.INFO)
     await dispatcher.start_polling(bot)
-
-# @main_router.message()
-# async def echo(message: types.Message = None):
-#     if message.text:
-#         await bot.send_message(
-#             chat_id=message.chat.id, 
-#             text=f'No such command: "{message.text}"',
-#             reply_to_message_id=message.message_id
-#         )
-#     elif message.sticker:
-#         await bot.send_message(
-#             chat_id=message.chat.id,
-#             text=f'No such command: "{message.sticker.emoji}"'
-#         )
-#     else:
-#         await message.send_copy(message.chat.id)
 
 
 if __name__ == "__main__":
