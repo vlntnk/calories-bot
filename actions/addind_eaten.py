@@ -40,7 +40,7 @@ async def handle_grams(message: Message, state: FSMContext):
         raise Exception('redis error in handle grams', ex)
     else:
         await message.answer(
-            text=f'Готов! Съеденные {consumed} каллории сохранены'
+            text=f'Готов! Съеденные {consumed} каллории сохранены✅'
         )
         await state.clear()
         await send_main_kb(message)

@@ -16,12 +16,21 @@ class RedisDal:
     def show_todays(self, username):
         today = datetime.date.today().strftime("%Y-%m-%d")
         if not self.rd.exists(username):
-            self.rd.hset(username)
+            self.rd.hset(username, today, 0)
         result = self.rd.hget(username, today)
         return result
     
     def show_statistics(self, username: str):
+        today = datetime.date.today().strftime("%Y-%m-%d")
         if not self.rd.exists(username):
-            self.rd.hset(username)
+            self.rd.hset(username, today, 0)
         result = self.rd.hgetall(username)
         return result
+    
+    def delete(self, username, date):
+        return self.rd.hdel(username, date)
+    
+    def delete_user(self, username: str):
+        if not self.rd.exists(username):
+            return 
+        return self.rd.delete(username)

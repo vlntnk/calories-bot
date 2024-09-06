@@ -26,10 +26,10 @@ async def handle_view_todays(income: Message | CallbackQuery):
     except Exception as ex:
         raise Exception('redis error in handle view todays', ex)
     else:
-        if result:
-            text = f'Вы сегодня съели {result.decode('utf-8')} каллорий'
+        if int(result) > 0:
+            text = f'Вы сегодня съели {result.decode('utf-8')} каллорий📆'
         else:
-            text = 'Вы сегодня ничего не ели пока что'
+            text = 'Вы сегодня ничего не ели пока что🍏'
         await income.bot.send_message(
             chat_id = chat_id,
             text = text
