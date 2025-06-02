@@ -20,6 +20,9 @@ class Adding(StatesGroup):
     name = State()
     dish = State()
     calories = State()
+    proteins = State()
+    fats = State()
+    carbohydrates = State()
 
 class HaveEaten(StatesGroup):
     choose = State()

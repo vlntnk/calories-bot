@@ -1,0 +1,49 @@
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bot
+    ports: 
+      - "7000:7000"
+    networks:
+      - "mynetwork"
+    volumes:
+      - .:/home/root/bot
+    working_dir: /home/root/bot
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DBURI=postgresql://postgres:1202@postgres/bot
+      - BOT_TOKEN=7726325367:AAHOICyKhRfNoWUchmcga2cGHgBGAdTnvyo
+      - REDIS_URL=redis://redis:6379
+  
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1202
+      POSTGRES_DB: bot
+    ports:
+      - "5432:5432"
+    networks:
+      - "mynetwork"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - "mynetwork"
+
+volumes:
+  postgres_data:
+
+networks:
+  mynetwork:
+    driver: bridge

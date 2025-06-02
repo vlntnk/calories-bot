@@ -10,6 +10,7 @@ class Inline():
     show_statistics = 'Статистика'
     show_menu = 'Меню блюд'
     add_dish = 'Добавить новое блюдо'
+    limits = 'Показать мою норму'
 
 class Data():
     add_meal = 'add_meal'
@@ -18,6 +19,7 @@ class Data():
     show_menu = 'menu'
     add_dish = 'add_dish'
     get_meal = 'get_meal'
+    show_limits = 'show_limits'
 
 
 def user_exists_inline():
@@ -32,7 +34,8 @@ def main_inline():
     second = [InlineKeyboardButton(text=Inline.show_todays, callback_data=Data.show_todays), 
               InlineKeyboardButton(text=Inline.show_statistics, callback_data=Data.show_statistics)]
     third = [InlineKeyboardButton(text=Inline.add_dish, callback_data=Data.add_dish)]
-    markup = InlineKeyboardMarkup(inline_keyboard=[first, second, third])
+    fourth = [InlineKeyboardButton(text=Inline.limits, callback_data=Data.show_limits)]
+    markup = InlineKeyboardMarkup(inline_keyboard=[first, second, third, fourth])
     return markup
 
 def menu_inline(result: list):

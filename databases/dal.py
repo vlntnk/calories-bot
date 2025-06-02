@@ -3,7 +3,7 @@ from sqlalchemy import update, select, delete, text
 from databases.pg_config import Users, Dishes
 
 
-from configs.validate_models import Dish
+from configs.validate_models import Dish, CPFC
 
 class DAL():
 
@@ -20,8 +20,8 @@ class DAL():
             self.session.rollback()
             print(f'{e}')
         
-    def write_calories(self, username: str, calories: int):
-        query = update(Users).where(Users.username==username).values(calories=calories)
+    def write_calories(self, username: str, calories: int, proteins: int, fats: int, carbohydrates: int):
+        query = update(Users).where(Users.username==username).values(calories=calories, proteins=proteins, fats=fats, carbohydrates=carbohydrates)
         try:
             self.session.execute(query)
             self.session.flush()
@@ -53,7 +53,8 @@ class DAL():
 
     def write_dish(self, dish: Dish):
         new_dish = Dishes(name=dish.name, dish=dish.dish, 
-                          calories=dish.calories, author=dish.author)
+                          calories=dish.calories, proteins=dish.proteins,
+                          fats=dish.fats, carbohydrates=dish.carbohydrates, author=dish.author)
         try:
             self.session.add(new_dish)
             self.session.flush()
@@ -75,15 +76,15 @@ class DAL():
             return result if result else None
         
     def read_meal_details(self, name: str, username: str):
-        query = text('SELECT dish, calories FROM public."Dishes" WHERE name=:name AND author=:username')
+        query = text('SELECT dish, calories, proteins, fats, carbohydrates FROM public."Dishes" WHERE name=:name AND author=:username')
         try: 
             raw_result = self.session.execute(query, {'name': name, 'username': username})
-            self.session.commit()
         except Exception as e:
             self.session.rollback()
             print(f'{e}, dal')
         else:
             result = raw_result.fetchall()
+            print("RESULT", result)
             return result
         
     def delet_users_dishes(self, username: str):
@@ -93,6 +94,20 @@ class DAL():
             print(result)
             self.session.flush()
             self.session.commit()
+        except Exception as e:
+            self.session.rollback()
+            print(f'{e}')
+
+    def get_limits(self, username: str):
+        query = select(Users).where(Users.username==username)
+        try:
+            result = self.session.execute(query).scalars().one_or_none()
+            return CPFC(
+                calories=result.calories,
+                proteins=result.proteins,
+                fats=result.fats,
+                carbohydrates=result.carbohydrates,
+            )
         except Exception as e:
             self.session.rollback()
             print(f'{e}')

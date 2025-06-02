@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-import os
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -8,7 +7,7 @@ class Settings(BaseSettings):
     BOT_TOKEN: str
 
 settings = Settings()
-DATABASE_URI = 'postgresql://postgres:1202@localhost/bot'
+DATABASE_URI = 'postgresql://postgres:1202@postgres/bot'
 
 if __name__ == "__main__":
     print(settings.BOT_TOKEN)

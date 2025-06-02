@@ -1,5 +1,5 @@
 from sqlalchemy import (create_engine, Column, Integer, String, ARRAY, Date, 
-                        Text, ForeignKey)
+                        Text, ForeignKey, Float)
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 import logging
 
@@ -15,6 +15,9 @@ class Users(Base):
     username = Column(String(30), nullable=False, unique=True)
     chat_id = Column(String(30), nullable=False, unique=True)
     calories = Column(Integer)
+    proteins = Column(Integer)
+    fats = Column(Integer)
+    carbohydrates = Column(Integer)
     dates = Column(ARRAY(Date))
     consumed = Column(ARRAY(Integer))
 
@@ -25,6 +28,9 @@ class Dishes(Base):
     name = Column(String(100), nullable=False)
     dish = Column(Text, nullable=False)
     calories = Column(Integer, nullable=False)
+    proteins = Column(Integer)
+    fats = Column(Integer)
+    carbohydrates = Column(Integer)
     author = Column(String, ForeignKey('Users.username'))
 
 engine = create_engine(DATABASE_URI, echo=True)

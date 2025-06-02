@@ -8,6 +8,7 @@ from api_interaction import calculate_calories
 from databases.dal import DAL
 from configs.dependency_injection import container
 from .independent import send_main_kb
+from calculate_PFC import calculate_PFC
 
 
 others = Router()
@@ -80,14 +81,16 @@ async def handle_calculate(message: types.Message, state: FSMContext):
             data[parametr] = translater[data[parametr]]
     print(data)
     response = calculate_calories(data)
+    calories = int(response)
+    proteins, fats, carbohydrates = calculate_PFC(calories, data["goal"], data['weight'])
     try:
         dal_object = DAL(container.get('db_session'))
-        dal_object.write_calories(message.from_user.username, int(response))
+        dal_object.write_calories(message.from_user.username, calories, proteins, fats, carbohydrates)
     except Exception as e:
         print(f'{e}')
     finally:
         await message.answer(
-            f'Твоя дневная норма {int(response)} калорий'
+            f'Твоя дневная норма {calories} калорий, {proteins} грамм белков, {fats} жиров и {carbohydrates} грамм углеводов.'
         )
         await send_main_kb(message)
 
